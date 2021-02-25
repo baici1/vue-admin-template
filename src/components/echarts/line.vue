@@ -1,8 +1,7 @@
 <template>
-  <div class="dashboard-container">
-    <!-- <div class="dashboard-text">name: {{ name }}</div> -->
-    <div id="main" style="width:600px;height:400px;" />
-  </div>
+
+  <!-- <div class="dashboard-text">name: {{ name }}</div> -->
+  <div :class="className" :style="{height:height,width:width}" />
 
 </template>
 
@@ -12,8 +11,24 @@ const echarts = require('echarts')
 require('echarts/lib/chart/bar')
 import { mapGetters } from 'vuex'
 import { getList } from '@/api/table'
+import resize from './mixins/resize'
 export default {
-  name: 'EchartsPie',
+  name: 'Echarts',
+  mixins: [resize],
+  props: {
+    className: {
+      type: String,
+      default: 'chart'
+    },
+    width: {
+      type: String,
+      default: '100%'
+    },
+    height: {
+      type: String,
+      default: '300px'
+    }
+  },
   data() {
     return {
       list: [],
@@ -71,7 +86,7 @@ export default {
     },
     // 初始化
     initCharts() {
-      this.chart = echarts.init(document.getElementById('main'))
+      this.chart = echarts.init(this.$el, 'macarons')
       this.setOptions()
       // 对图表对象鼠标事件进行监听
       this.chart.on('mouseover', () => {
@@ -94,26 +109,37 @@ export default {
     setOptions() {
       this.chart.setOption({
         title: {
-          text: '启明星男女比例'
+          text: '男女比例',
+          subtext: '绝对真实',
+          left: 'center'
         },
-        tooltip: {},
+        tooltip: {
+          trigger: 'item'
+        },
         legend: {
-          data: ['开发组', '智能组']
+          orient: 'vertical',
+          left: 'left'
         },
-        xAxis: {
-          data: ['男', '女', '总人数']
-        },
-        yAxis: {},
-        series: [{
-          name: '开发组',
-          type: 'bar',
-          data: [this.boy1, this.girl1, this.boy1 + this.girl1]
-        },
-        {
-          name: '智能组',
-          type: 'bar',
-          data: [this.boy2, this.girl2, this.boy2 + this.girl2]
-        }]
+        series: [
+          {
+            name: '访问来源',
+            type: 'pie',
+            radius: '50%',
+            data: [
+              { value: this.girl1, name: '开发组女' },
+              { value: this.girl2, name: '智能组女' },
+              { value: this.boy1, name: '开发组男' },
+              { value: this.boy2, name: '智能组男' }
+            ],
+            emphasis: {
+              itemStyle: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: 'rgba(0, 0, 0, 0.5)'
+              }
+            }
+          }
+        ]
       })
     }
 
@@ -131,4 +157,5 @@ export default {
     line-height: 46px;
   }
 }
+
 </style>

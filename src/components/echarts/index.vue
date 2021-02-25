@@ -1,8 +1,7 @@
 <template>
-  <div class="dashboard-container">
-    <!-- <div class="dashboard-text">name: {{ name }}</div> -->
-    <div id="main" style="width:600px;height:400px;" />
-  </div>
+
+  <!-- <div class="dashboard-text">name: {{ name }}</div> -->
+  <div :class="className" :style="{height:height,width:width}" />
 
 </template>
 
@@ -12,8 +11,24 @@ const echarts = require('echarts')
 require('echarts/lib/chart/bar')
 import { mapGetters } from 'vuex'
 import { getList } from '@/api/table'
+import resize from './mixins/resize'
 export default {
   name: 'Echarts',
+  mixins: [resize],
+  props: {
+    className: {
+      type: String,
+      default: 'chart'
+    },
+    width: {
+      type: String,
+      default: '100%'
+    },
+    height: {
+      type: String,
+      default: '300px'
+    }
+  },
   data() {
     return {
       list: [],
@@ -71,7 +86,7 @@ export default {
     },
     // 初始化
     initCharts() {
-      this.chart = echarts.init(document.getElementById('main'))
+      this.chart = echarts.init(this.$el, 'macarons')
       this.setOptions()
       // 对图表对象鼠标事件进行监听
       this.chart.on('mouseover', () => {

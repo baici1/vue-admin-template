@@ -8,7 +8,7 @@
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
         Add
       </el-button>
-      <a href="http://localhost:8080/download">
+      <a href="http://47.113.203.60:8081/download">
         <el-button :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download">
           export
         </el-button>
