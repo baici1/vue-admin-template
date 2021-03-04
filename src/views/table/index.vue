@@ -92,7 +92,7 @@
       </el-table-column>
       <el-table-column v-if="showReviewer" label="是否录取" width="110px" align="center">
         <template v-slot="scope">
-          {{ scope.row.result==0?"未录取":"已录取" }}
+          {{ scope.row.result==0?"未录取": scope.row.result==1?"已录取":"测试通过" }}
         </template>
       </el-table-column>
     </el-table>
@@ -166,13 +166,23 @@
           <el-select v-model="temp.result" placeholder="请选择">
             <el-option
               key="0"
-              label="未录取"
+              label="未面试"
               value="0"
             />
             <el-option
               key="1"
               label="已录取"
               value="1"
+            />
+            <el-option
+              key="1"
+              label="笔试通过"
+              value="2"
+            />
+            <el-option
+              key="1"
+              label="面试通过"
+              value="3"
             />
           </el-select>
         </el-form-item>
@@ -210,7 +220,10 @@
   }
 
   .el-table .success-row {
-    background: #f0f9eb;
+    background: rgb(225,243,216);
+  }
+  .el-table .Brand-row {
+    background: #d3f5c0;
   }
 </style>
 <script>
@@ -280,6 +293,10 @@ export default {
     tableRowClassName({ row, rowIndex }) {
       if (row.result === '1') {
         return 'success-row'
+      } else if (row.result === '2') {
+        return 'warning-row'
+      } else if (row.result === '3') {
+        return 'Brand-row'
       }
       return ''
     },

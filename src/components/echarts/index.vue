@@ -109,26 +109,69 @@ export default {
     setOptions() {
       this.chart.setOption({
         title: {
-          text: '启明星男女比例'
+          text: '启明星'
         },
         tooltip: {},
         legend: {
-          data: ['开发组', '智能组']
+          data: ['男', '女', '总人数']
         },
         xAxis: {
-          data: ['男', '女', '总人数']
+          data: ['开发组', '智能组']
         },
         yAxis: {},
         series: [{
-          name: '开发组',
+          name: '男',
           type: 'bar',
-          data: [this.boy1, this.girl1, this.boy1 + this.girl1]
+          data: [this.boy1, this.boy2],
+          itemStyle: {
+            normal: {
+              label: {
+                show: true, // 开启显示
+                position: 'top', // 在上方显示
+                textStyle: { // 数值样式
+                  color: 'black',
+                  fontSize: 16
+                }
+              }
+            }
+          }
         },
         {
-          name: '智能组',
+          name: '女',
           type: 'bar',
-          data: [this.boy2, this.girl2, this.boy2 + this.girl2]
-        }]
+          data: [this.girl1, this.girl2],
+          itemStyle: {
+            normal: {
+              label: {
+                show: true, // 开启显示
+                position: 'top', // 在上方显示
+                textStyle: { // 数值样式
+                  color: 'black',
+                  fontSize: 16
+                }
+              }
+            }
+          }
+        },
+        {
+          name: '总人数',
+          type: 'bar',
+          data: [this.boy1 + this.girl1, this.boy2 + this.girl2],
+          itemStyle: {
+            normal: {
+              label: {
+                show: true, // 开启显示
+                position: 'top', // 在上方显示
+                textStyle: { // 数值样式
+                  color: 'black',
+                  fontSize: 16
+                }
+              }
+            }
+          }
+        }
+
+        ]
       })
     }
 
