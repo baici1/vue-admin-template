@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="adddata.stu_id" placeholder="输入学号" style="width: 200px;" class="filter-item" clearable @clear="searchdata" />
+      <el-input v-model="adddata.real_name" placeholder="输入姓名" style="width: 200px;" class="filter-item" clearable @clear="searchdata" />
       <el-button class="filter-item" type="primary" icon="el-icon-search" @click="searchdata">
         Search
       </el-button>
@@ -257,7 +257,7 @@ export default {
       dialogVisible2: false, // add对话框隐藏和显示
       dialogStatus: '', // 对话框标题,
       adddata: { // 添加
-        stu_id: ''
+        real_name: ''
       },
       temp: { // 更改form
         id: '',
@@ -364,13 +364,15 @@ export default {
     },
     // 查询数据
     searchdata() {
-      if (this.adddata.stu_id === '') {
+      if (this.adddata.real_name === '') {
         this.fetchData()
       } else {
         searchlist(this.adddata).then(res => {
           console.log('res: ', res)
-          this.list.splice(0, this.list.length)
-          this.list.push(res.data)
+          // this.list.splice(0, this.list.length)
+          // this.list.push(res.data)
+          this.list = res.data
+          this.total = res.data.length
           console.log('this.list: ', this.list)
         }).catch(() => {
           this.$message.error('找不到')
