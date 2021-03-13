@@ -33,7 +33,7 @@ export const constantRoutes = [
   {
     path: '/login',
     component: () => import('@/views/login/index'),
-    hidden: true//  当设置 true 的时候该路由不会在侧边栏出现 如401，login等页面，或者如一些编辑页面/edit/1
+    hidden: true //  当设置 true 的时候该路由不会在侧边栏出现 如401，login等页面，或者如一些编辑页面/edit/1
   },
 
   {
@@ -46,12 +46,14 @@ export const constantRoutes = [
     path: '/',
     component: Layout,
     redirect: '/dashboard', // 重定向
-    children: [{
-      path: 'dashboard',
-      name: 'Dashboard',
-      component: () => import('@/views/dashboard/index'), // 导入dashboard页面
-      meta: { title: '首页', icon: 'dashboard' }
-    }]
+    children: [
+      {
+        path: 'dashboard',
+        name: 'Dashboard',
+        component: () => import('@/views/dashboard/index'), // 导入dashboard页面
+        meta: { title: '首页', icon: 'dashboard' }
+      }
+    ]
   },
 
   {
@@ -66,12 +68,22 @@ export const constantRoutes = [
         name: 'Table',
         component: () => import('@/views/table/index'),
         meta: { title: '学生列表', icon: 'table' }
+      },
+      {
+        path: ':stu_id',
+        name: 'Detail',
+        component: () => import('@/views/detail/index'),
+        meta: { title: '学生详情' },
+        hidden: true,
+        props: true
       }
+
       // {
-      //   path: 'tree',
-      //   name: 'Tree',
-      //   component: () => import('@/views/tree/index'),
-      //   meta: { title: 'Tree', icon: 'tree' }
+      //   path: ':stu_id',
+      //   name: 'Detail',
+      //   component: () => import('@/views/detail/index'),
+      //   meta: { title: 'Detail', icon: 'tree' },
+      //   hidden: true
       // }
     ]
   },
@@ -119,13 +131,16 @@ export const constantRoutes = [
             children: [
               {
                 path: 'menu1-2-1',
-                component: () => import('@/views/nested/menu1/menu1-2/menu1-2-1'),
+
+                component: () =>
+                  import('@/views/nested/menu1/menu1-2/menu1-2-1'),
                 name: 'Menu1-2-1',
                 meta: { title: 'Menu1-2-1' }
               },
               {
                 path: 'menu1-2-2',
-                component: () => import('@/views/nested/menu1/menu1-2/menu1-2-2'),
+                component: () =>
+                  import('@/views/nested/menu1/menu1-2/menu1-2-2'),
                 name: 'Menu1-2-2',
                 meta: { title: 'Menu1-2-2' }
               }
@@ -147,7 +162,6 @@ export const constantRoutes = [
       }
     ]
   },
-
   {
     path: 'external-link',
     component: Layout,
@@ -163,11 +177,12 @@ export const constantRoutes = [
   { path: '*', redirect: '/404', hidden: true }
 ]
 
-const createRouter = () => new Router({
-  mode: 'hash', // require service support
-  scrollBehavior: () => ({ y: 0 }),
-  routes: constantRoutes
-})
+const createRouter = () =>
+  new Router({
+    mode: 'hash', // require service support
+    scrollBehavior: () => ({ y: 0 }),
+    routes: constantRoutes
+  })
 
 const router = createRouter()
 

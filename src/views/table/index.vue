@@ -32,9 +32,14 @@
           {{ scope.$index+1 }}
         </template>
       </el-table-column>
+
       <el-table-column label="学号" align="center">
         <template v-slot="scope">
-          {{ scope.row.stu_id }}
+
+          <router-link :to="{name:'Detail',params:{stu_id:scope.row.stu_id}}">
+            {{ scope.row.stu_id }}
+          </router-link>
+
         </template>
       </el-table-column>
       <el-table-column label="姓名" align="center">
