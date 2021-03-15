@@ -1,6 +1,15 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
+      <!-- <el-input v-model="adddata" placeholder="请输入内容" class="input-with-select" style="width: 400px;" clearable @clear="searchdata">
+        <el-select slot="prepend" v-model="select" placeholder="请选择">
+          <el-option label="姓名" value="1" />
+          <el-option label="组别" value="2" />
+          <el-option label="录取情况" value="3" />
+        </el-select>
+        <el-button slot="append" icon="el-icon-search" />
+      </el-input> -->
+
       <el-input v-model="adddata.real_name" placeholder="输入姓名" style="width: 200px;" class="filter-item" clearable @clear="searchdata" />
       <el-button class="filter-item" type="primary" icon="el-icon-search" @click="searchdata">
         Search
@@ -12,22 +21,21 @@
         <el-button :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download">
           export
         </el-button>
-        <el-checkbox v-model="showReviewer" class="filter-item" style="margin-left:15px;">
-          录取情况
-        </el-checkbox>
       </a>
+      <el-checkbox v-model="showReviewer" class="filter-item" style="margin-left:15px;">
+        录取情况
+      </el-checkbox>
     </div>
     <el-table
       v-loading="listLoading"
       :data="list"
       element-loading-text="Loading"
-      border
       fit
       :row-class-name="tableRowClassName"
       highlight-current-row
-      :default-sort="{prop: 'code', order: 'descending'}"
+      :default-sort="{prop: 'code', order: 'descending',prop: 'stu_id'}"
     >
-      <el-table-column align="center" label="序号" width="80">
+      <el-table-column align="center" label="序号" width="80" sortable prop="stu_id">
         <template v-slot="scope">
           {{ scope.$index+1 }}
         </template>
@@ -35,53 +43,72 @@
 
       <el-table-column label="学号" align="center">
         <template v-slot="scope">
-
           <router-link :to="{name:'Detail',params:{stu_id:scope.row.stu_id}}">
             {{ scope.row.stu_id }}
           </router-link>
-
         </template>
       </el-table-column>
       <el-table-column label="姓名" align="center">
         <template v-slot="scope">
-          {{ scope.row.real_name }}
+          <router-link :to="{name:'Detail',params:{stu_id:scope.row.stu_id}}">
+            {{ scope.row.real_name }}
+          </router-link>
         </template>
       </el-table-column>
 
-      <el-table-column label="选择组别" align="center">
+      <el-table-column
+        label="选择组别"
+        align="center"
+        :filters="[{text: '智能组', value: '0'}, {text: '开发组', value: '1'}]"
+        :filter-method="filterHandler"
+      >
         <template v-slot="scope">
-          {{ scope.row.group_id ==1?"开发组":"智能组" }}
+          <router-link :to="{name:'Detail',params:{stu_id:scope.row.stu_id}}">
+            {{ scope.row.group_id ==='1'?"开发组":"智能组" }}
+          </router-link>
         </template>
       </el-table-column>
 
       <el-table-column label="性别" align="center">
         <template v-slot="scope">
-          {{ scope.row.sex ==0?"男":"女" }}
+          <router-link :to="{name:'Detail',params:{stu_id:scope.row.stu_id}}">
+            {{ scope.row.sex ==='0'?"男":"女" }}
+          </router-link>
         </template>
       </el-table-column>
       <el-table-column label="学院" align="center">
         <template v-slot="scope">
-          {{ scope.row.college }}
+          <router-link :to="{name:'Detail',params:{stu_id:scope.row.stu_id}}">
+            {{ scope.row.college }}
+          </router-link>
         </template>
       </el-table-column>
       <el-table-column label="专业" align="center">
         <template v-slot="scope">
-          {{ scope.row.major }}
+          <router-link :to="{name:'Detail',params:{stu_id:scope.row.stu_id}}">
+            {{ scope.row.major }}
+          </router-link>
         </template>
       </el-table-column>
       <el-table-column label="电话" align="center">
         <template v-slot="scope">
-          {{ scope.row.phone }}
+          <router-link :to="{name:'Detail',params:{stu_id:scope.row.stu_id}}">
+            {{ scope.row.phone }}
+          </router-link>
         </template>
       </el-table-column>
       <el-table-column label="qq" align="center">
         <template v-slot="scope">
-          {{ scope.row.qq }}
+          <router-link :to="{name:'Detail',params:{stu_id:scope.row.stu_id}}">
+            {{ scope.row.qq }}
+          </router-link>
         </template>
       </el-table-column>
       <el-table-column label="成绩" align="center" sortable prop="code">
         <template v-slot="scope">
-          {{ scope.row.code }}
+          <router-link :to="{name:'Detail',params:{stu_id:scope.row.stu_id}}">
+            {{ scope.row.code }}
+          </router-link>
         </template>
       </el-table-column>
 
@@ -95,20 +122,29 @@
           </el-button>
         </template>
       </el-table-column>
-      <el-table-column v-if="showReviewer" label="是否录取" width="110px" align="center">
+
+      <el-table-column
+        v-if="showReviewer"
+        label="是否录取"
+        width="110"
+        align="center"
+        :filters="[{text: '为面试', value: '0'}, {text: '已录取', value: '1'},{text: '笔试通过', value: '2'},{text: '面试通过', value: '3'}]"
+        :filter-method="filter_result"
+      >
         <template v-slot="scope">
           {{ scope.row.result==0?"未录取": scope.row.result==1?"已录取":"测试通过" }}
         </template>
       </el-table-column>
+
     </el-table>
     <!-- 分页 -->
-    <el-pagination
+    <!-- <el-pagination
       layout="prev, pager, next"
       :total="total"
-      :page-size="listQuery.pagesize"
+      :page-size="14"
       :current-page.sync="listQuery.page"
       @current-change="handleCurrentChange"
-    />
+    /> -->
     <!-- update对话框 -->
     <el-dialog
       :title="dialogStatus"
@@ -180,12 +216,12 @@
               value="1"
             />
             <el-option
-              key="1"
+              key="2"
               label="笔试通过"
               value="2"
             />
             <el-option
-              key="1"
+              key="3"
               label="面试通过"
               value="3"
             />
@@ -230,6 +266,12 @@
   .el-table .Brand-row {
     background: #d3f5c0;
   }
+   .el-select .el-input {
+    width: 130px;
+  }
+  .input-with-select .el-input-group__prepend {
+    background-color: #fff;
+  }
 </style>
 <script>
 import { deletelist, getList, download, updatelist, addlist, searchlist } from '@/api/table'
@@ -253,7 +295,7 @@ export default {
       listLoading: true, // 转动效果
       listQuery: { // 分页数据
         page: 1,
-        pagesize: 14
+        pagesize: 1000
       },
       stu: {
         stu_id: ''
@@ -262,7 +304,9 @@ export default {
       dialogVisible2: false, // add对话框隐藏和显示
       dialogStatus: '', // 对话框标题,
       adddata: { // 添加
-        real_name: ''
+        real_name: '',
+        group_id: '',
+        result: ''
       },
       temp: { // 更改form
         id: '',
@@ -278,7 +322,10 @@ export default {
         result: '',
         code: ''
       },
-      showReviewer: false// 录取情况
+      group_one: [],
+      group_two: [],
+      showReviewer: false, // 录取情况,
+      select: 0
     }
   },
   created() {
@@ -333,15 +380,26 @@ export default {
     },
     // 删除信息
     handleDelete(stu_id) {
-      this.stu.stu_id = stu_id
-      deletelist(this.stu).then(response => {
-        console.log('response: ', response)
-        this.fetchData()
-        this.$notify({
-          title: 'Success',
-          message: 'Delete Successfully',
-          type: 'success',
-          duration: 2000
+      this.$confirm('此操作将永久删除该数据, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.stu.stu_id = stu_id
+        deletelist(this.stu).then(response => {
+          console.log('response: ', response)
+          this.fetchData()
+          this.$notify({
+            title: 'Success',
+            message: 'Delete Successfully',
+            type: 'success',
+            duration: 2000
+          })
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
         })
       })
     },
@@ -409,6 +467,12 @@ export default {
       //   })
       //   this.downloadLoading = false
       // })
+    },
+    filterHandler(value, row, column) {
+      return row.group_id === value
+    },
+    filter_result(value, row) {
+      return row.result === value
     }
   }
 }
