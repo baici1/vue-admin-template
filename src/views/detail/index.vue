@@ -154,7 +154,8 @@ export default {
       },
       update: {
         one: '0',
-        two: '0'
+        two: '0',
+        stu_id: this.stu_id
       }
     }
   },
@@ -195,6 +196,14 @@ export default {
       const { data } = await getdata(this.query)
       console.log('data: ', data)
       this.form = data
+      const one = document.getElementById('one')
+      const two = document.getElementById('two')
+      if (data.one === '1') {
+        one.classList.add('one')
+      }
+      if (data.two === '1') {
+        two.classList.add('two')
+      }
     },
     async onSubmit() {
       console.log(this.form)

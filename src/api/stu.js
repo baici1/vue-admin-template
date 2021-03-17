@@ -5,7 +5,7 @@ export function getdata(query) {
     url: '/des/get',
     method: 'GET',
     params: query,
-    baseURL: 'http://47.113.203.60:8081'
+    baseURL: 'http://127.0.0.1:8081'
   })
 }
 export function upateddata(query) {
@@ -13,7 +13,7 @@ export function upateddata(query) {
     url: '/des/update',
     method: 'POST',
     data: query,
-    baseURL: 'http://47.113.203.60:8081'
+    baseURL: 'http://127.0.0.1:8081'
   })
 }
 
