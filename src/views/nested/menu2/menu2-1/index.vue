@@ -71,7 +71,7 @@
 </template>
 
 <script>
-import { gettwo } from '@/api/stu'
+import { getone } from '@/api/stu'
 export default {
   data() {
     // 这里存放数据
@@ -106,12 +106,12 @@ export default {
   // 方法集合
   methods: {
     async getdata() {
-      const res = await gettwo()
+      const res = await getone()
       console.log('res: ', res)
       const form = []
       res.data.forEach(function(item) {
         console.log('item: ', item)
-        if (item.group_id === '1') {
+        if (item.group_id === '0') {
           form.push(item)
         }
       })

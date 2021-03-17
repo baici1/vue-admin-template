@@ -104,7 +104,7 @@ export const constantRoutes = [
   {
     path: '/nested',
     component: Layout,
-    redirect: '/nested/menu1',
+    redirect: '/nested/menu1/menu1-1',
     name: 'Nested',
     meta: {
       title: '面试情况',
@@ -113,6 +113,7 @@ export const constantRoutes = [
     children: [
       {
         path: 'menu1',
+        redirect: '/nested/menu1/menu1-1',
         component: () => import('@/views/nested/menu1/index'), // Parent router-view
         name: 'Menu1',
         meta: { title: '开发组' },
@@ -135,7 +136,21 @@ export const constantRoutes = [
         path: 'menu2',
         component: () => import('@/views/nested/menu2/index'),
         name: 'Menu2',
-        meta: { title: 'menu2' }
+        meta: { title: '智能组' },
+        children: [
+          {
+            path: 'menu2-1',
+            component: () => import('@/views/nested/menu2/menu2-1'),
+            name: 'Menu2-1',
+            meta: { title: '一面通过' }
+          },
+          {
+            path: 'menu2-2',
+            component: () => import('@/views/nested/menu2/menu2-2'),
+            name: 'Menu2-2',
+            meta: { title: '二面通过' }
+          }
+        ]
       }
     ]
   },

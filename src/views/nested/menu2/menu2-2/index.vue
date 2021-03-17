@@ -111,7 +111,7 @@ export default {
       const form = []
       res.data.forEach(function(item) {
         console.log('item: ', item)
-        if (item.group_id === '1') {
+        if (item.group_id === '0') {
           form.push(item)
         }
       })

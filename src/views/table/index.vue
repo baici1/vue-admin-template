@@ -76,7 +76,7 @@
           </router-link>
         </template>
       </el-table-column>
-      <el-table-column label="学院" align="center">
+      <el-table-column label="学院" align="center" :filters="filter" :filter-method="filtercollege">
         <template v-slot="scope">
           <router-link :to="{name:'Detail',params:{stu_id:scope.row.stu_id}}">
             {{ scope.row.college }}
@@ -325,7 +325,25 @@ export default {
       group_one: [],
       group_two: [],
       showReviewer: false, // 录取情况,
-      select: 0
+      select: 0,
+      filter: [
+        {
+          text: '计算机与信息学院',
+          value: '计算机与信息学院'
+        },
+        {
+          text: '材料与化工学院',
+          value: '材料与化工学院'
+        },
+
+        {
+          text: '电气与新能源学院',
+          value: '电气与新能源学院'
+        },
+        {
+          text: '理学院',
+          value: '理学院'
+        }]
     }
   },
   created() {
@@ -473,6 +491,9 @@ export default {
     },
     filter_result(value, row) {
       return row.result === value
+    },
+    filtercollege(value, row) {
+      return row.college === value
     }
   }
 }
